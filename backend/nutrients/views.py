@@ -1,8 +1,10 @@
+from optparse import AmbiguousOptionError
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
-from .models import Ingredient, Nutrient
-from .serializers import IngredientSerializer, NutrientSerializer
+from .models import Ingredient, Nutrient, IngredientNutrient
+from .serializers import IngredientSerializer, NutrientSerializer, IngredientNutrientSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 
@@ -100,3 +102,48 @@ class NutrientDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class IngredientNutrientListView(APIView):
+    @extend_schema(
+        summary="List of all ingredient-nutrient association",
+        responses={200: IngredientNutrientSerializer(many=True)}
+    )
+    def get(self, request):
+        ingredient_nutrient = IngredientNutrient.objects.all()
+        serializer = IngredientNutrientSerializer(ingredient_nutrient, many=True)
+        return Response(serializer.data)
+
+    @extend_schema(
+        summary="Add ingredient-nutrient association",
+        request=IngredientNutrientSerializer,
+        responses={201: IngredientNutrientSerializer}
+    )
+    def post(self, request):
+        serializer = IngredientNutrientSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class IngredientNutrientDetailView(APIView):
+    @extend_schema(
+        summary="Edit ingredient-nutrient association",
+        request=IngredientNutrientSerializer,
+        responses={200: IngredientNutrientSerializer}
+    )
+    def put(self, request, pk):
+        ingredient_nutrient = get_object_or_404(IngredientNutrient, pk=pk)
+        serializer = IngredientNutrientSerializer(ingredient_nutrient, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(
+        summary="Delete ingredient-nutrient association",
+        responses={204: None}
+    )
+    def delete(self, request, pk):
+        ingredient_nutrient = get_object_or_404(IngredientNutrient, pk=pk)
+        ingredient_nutrient.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
