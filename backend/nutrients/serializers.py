@@ -6,3 +6,8 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ['name', 'category']
+
+class NutrientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nutrient
+        fields = ['name', 'unit']
