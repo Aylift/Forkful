@@ -8,6 +8,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'category']
 
 
+
 class NutrientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nutrient
@@ -31,3 +32,4 @@ class IngredientNutrientSerializer(serializers.ModelSerializer):
             'ingredient', 'nutrient', 'amount_per_100g',
             'ingredient_id', 'nutrient_id',
         ]
+        fields = ['name', 'unit']
