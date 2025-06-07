@@ -1,5 +1,3 @@
-from optparse import AmbiguousOptionError
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
