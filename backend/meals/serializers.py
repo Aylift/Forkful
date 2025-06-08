@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Meal, MealIngredient
-from backend.nutrients.models import Ingredient
-from backend.nutrients.serializers import IngredientSerializer
+from nutrients.models import Ingredient
+from nutrients.serializers import IngredientSerializer
 
 
 class MealIngredientSerializer(serializers.ModelSerializer):

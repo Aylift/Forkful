@@ -78,13 +78,22 @@ class NutrientListView(APIView):
 
 class NutrientDetailView(APIView):
     @extend_schema(
+        summary="Retrieve nutrient",
+        responses={200: IngredientNutrientSerializer}
+    )
+    def get(self, request, pk):
+        nutrient = get_object_or_404(Ingredient, pk=pk)
+        serializer = NutrientSerializer(nutrient)
+        return Response(serializer.data)
+
+    @extend_schema(
         summary="Edit nutrient",
         request=NutrientSerializer,
         responses={200: NutrientSerializer}
     )
     def put(self, request, pk):
         nutrient = get_object_or_404(Nutrient, pk=pk)
-        serializer = NutrientSerializer(Nutrient, data=request.data)
+        serializer = NutrientSerializer(nutrient, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -106,8 +115,8 @@ class IngredientNutrientListView(APIView):
         responses={200: IngredientNutrientSerializer(many=True)}
     )
     def get(self, request):
-        ingredient_nutrient = IngredientNutrient.objects.all()
-        serializer = IngredientNutrientSerializer(ingredient_nutrient, many=True)
+        ingredient_nutrients = IngredientNutrient.objects.all()
+        serializer = IngredientNutrientSerializer(ingredient_nutrients, many=True)
         return Response(serializer.data)
 
     @extend_schema(
@@ -124,6 +133,15 @@ class IngredientNutrientListView(APIView):
 
 
 class IngredientNutrientDetailView(APIView):
+    @extend_schema(
+        summary="Retrieve nutrient-ingredient association",
+        responses={200: IngredientNutrientSerializer}
+    )
+    def get(self, request, pk):
+        nutrient_ingredient = get_object_or_404(Ingredient, pk=pk)
+        serializer = IngredientSerializer(nutrient_ingredient)
+        return Response(serializer.data)
+
     @extend_schema(
         summary="Edit ingredient-nutrient association",
         request=IngredientNutrientSerializer,

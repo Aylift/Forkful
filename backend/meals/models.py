@@ -1,5 +1,5 @@
 from django.db import models
-from backend.nutrients.models import Ingredient, IngredientNutrient
+from nutrients.models import Ingredient, IngredientNutrient
 
 
 class Meal(models.Model):

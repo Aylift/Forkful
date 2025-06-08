@@ -32,4 +32,3 @@ class IngredientNutrientSerializer(serializers.ModelSerializer):
             'ingredient', 'nutrient', 'amount_per_100g',
             'ingredient_id', 'nutrient_id',
         ]
-        fields = ['name', 'unit']
