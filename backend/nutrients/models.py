@@ -5,10 +5,16 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Nutrient(models.Model):
     name = models.CharField(max_length=255)
     unit = models.CharField(max_length=50, help_text='e.g. g, mg, kcal')
+
+    def __str__(self):
+        return self.name
 
 
 class IngredientNutrient(models.Model):
@@ -18,3 +24,6 @@ class IngredientNutrient(models.Model):
 
     class Meta:
         unique_together = ('ingredient', 'nutrient')
+
+    def __str__(self):
+        return f'{self.nutrient} in {self.ingredient}'
