@@ -5,9 +5,11 @@ from .models import Meal, MealIngredient
 from .serializers import MealIngredientSerializer, MealSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class MealListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="List of all meals",
         responses={200: MealSerializer(many=True)}
@@ -31,6 +33,7 @@ class MealListView(APIView):
 
 
 class MealDetailView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="Retrieve a meal",
         responses={200: MealSerializer}
@@ -64,6 +67,7 @@ class MealDetailView(APIView):
 
 
 class MealIngredientListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="List of all meal-ingredients association",
         responses={200: MealIngredientSerializer(many=True)}
@@ -87,6 +91,7 @@ class MealIngredientListView(APIView):
 
 
 class MealIngredientDetailView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="Retrieve a meal-ingredient association",
         responses={200: MealIngredientSerializer}
