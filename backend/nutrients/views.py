@@ -5,9 +5,11 @@ from .models import Ingredient, Nutrient, IngredientNutrient
 from .serializers import IngredientSerializer, NutrientSerializer, IngredientNutrientSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class IngredientListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="List of all ingredients",
         responses={200: IngredientSerializer(many=True)}
@@ -31,6 +33,7 @@ class IngredientListView(APIView):
 
 
 class IngredientDetailView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="Edit ingredient",
         request=IngredientSerializer,
@@ -55,6 +58,7 @@ class IngredientDetailView(APIView):
 
 
 class NutrientListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="List of all nutrients",
         responses={200: NutrientSerializer(many=True)}
@@ -77,6 +81,7 @@ class NutrientListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NutrientDetailView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="Retrieve nutrient",
         responses={200: IngredientNutrientSerializer}
@@ -110,6 +115,7 @@ class NutrientDetailView(APIView):
 
 
 class IngredientNutrientListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="List of all ingredient-nutrient association",
         responses={200: IngredientNutrientSerializer(many=True)}
@@ -133,6 +139,7 @@ class IngredientNutrientListView(APIView):
 
 
 class IngredientNutrientDetailView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         summary="Retrieve nutrient-ingredient association",
         responses={200: IngredientNutrientSerializer}
