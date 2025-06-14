@@ -26,7 +26,7 @@ class MealSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'meal_ingredients', 'total_nutrients']
 
     def get_total_nutrients(self, obj):
-        return obj.total_nutrient()
+        return obj.total_nutrients()
 
     def create(self, validated_data):
         ingredients_data = validated_data.pop('meal_ingredients')
