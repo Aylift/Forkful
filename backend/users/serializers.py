@@ -2,13 +2,37 @@ from rest_framework import serializers
 from .models import CustomUser
 
 
-class UserSerializer(serializers.Serializer):
-    password = serializers.CharField(write_only=True)
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+    password_repeat = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'phone_number', 'address']
+        fields = ['username', 'email', 'password', 'password_repeat', 'first_name', 'last_name']
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password_repeat']:
+                raise serializers.ValidationError("Passwords don't match")
+            return attrs
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
-        return user
+        validated_data.pop('password_repeat', None)
+            return CustomUser.objects.create_user(**validated_data)
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    #TODO add validation
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+            model = CustomUser
+            fields = ['id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'address']
+            read_only_fields = ['id', 'username', 'email']
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+            model = CustomUser
+            fields = ['first_name', 'last_name', 'phone_number', 'address']
