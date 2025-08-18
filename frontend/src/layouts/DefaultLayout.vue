@@ -1,7 +1,3 @@
-<script setup>
-import AppNavbar from "@/components/AppNavbar.vue";
-</script>
-
 <template>
   <div>
     <AppNavbar />
@@ -10,6 +6,10 @@ import AppNavbar from "@/components/AppNavbar.vue";
     </main>
   </div>
 </template>
+
+<script setup>
+import AppNavbar from "@/components/AppNavbar.vue";
+</script>
 
 <style scoped>
   main {
