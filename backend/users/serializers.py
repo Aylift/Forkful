@@ -12,12 +12,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_repeat']:
-                raise serializers.ValidationError("Passwords don't match")
-            return attrs
+            raise serializers.ValidationError("Passwords don't match")
+        return attrs
 
     def create(self, validated_data):
         validated_data.pop('password_repeat', None)
-            return CustomUser.objects.create_user(**validated_data)
+        return CustomUser.objects.create_user(**validated_data)
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
