@@ -36,3 +36,12 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
             model = CustomUser
             fields = ['first_name', 'last_name', 'phone_number', 'address']
+
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+
+class CheckAuthResponseSerializer(serializers.Serializer):
+    authenticated = serializers.BooleanField()
+    user = serializers.DictField()

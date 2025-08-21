@@ -3,12 +3,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer, ProfileUpdateSerializer
+from .serializers import RegisterSerializer, ProfileSerializer, ProfileUpdateSerializer, LogoutSerializer, CheckAuthResponseSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from drf_spectacular.types import OpenApiTypes
 
 
 User = get_user_model()
@@ -44,7 +41,6 @@ class RegisterView(generics.CreateAPIView):
 class CustomTokenObtainPairSerializer(TokenObtainPairView):
     def validate(self, attrs):
             data = super().validate(attrs)
-            # Add user info to login response
             data['user'] = {
                 'id': self.user.id,
                 'username': self.user.username,
@@ -98,42 +94,34 @@ class ProfileUpdateView(generics.UpdateAPIView):
         return self.request.user
 
 
-    class LogoutView(APIView):
-        permission_classes = [permissions.IsAuthenticated]
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = LogoutSerializer
 
-        def post(self, request):
-            try:
-                refresh_token = request.data["refresh"]
-                token = RefreshToken(refresh_token)
-                token.blacklist()
-                return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
-            except Exception:
-                return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        try:
+            user = request.user
 
-
-    class CheckAuthView(APIView):
-        permission_classes = [permissions.IsAuthenticated]
-
-        def get(self, request):
             return Response({
-                'authenticated': True,
-                'user': {
-                    'id': request.user.id,
-                    'username': request.user.username,
-                    'email': request.user.email,
-                }
-            })
+                'message': f'Goodbye {user.username}! Logout successful.'
+            }, status=status.HTTP_200_OK)
 
-# TODO
-# URLs setup → Test each endpoint with Postman
-# Add DEFAULT_AUTHENTICATION_CLASSES in settings
-# Create a @login_required endpoint to test auth
-# Frontend integration - Store tokens in localStorage/cookies
-# Add token refresh logic in your Vue app
-# Implement logout (blacklist tokens if using that feature)
+        except Exception as e:
+            return Response({
+                'message': 'Logout completed'
+            }, status=status.HTTP_200_OK)
 
-# Use Postman collections - Save all your requests for easy testing
-# Add custom permissions - IsOwnerOrReadOnly for profile updates
-# Email validation - Consider adding email verification later
-# Password reset flow - Plan for forgotten passwords
-# Rate limiting - Protect login endpoint from brute force
+
+class CheckAuthView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CheckAuthResponseSerializer
+
+    def get(self, request):
+        return Response({
+            'authenticated': True,
+            'user': {
+                'id': request.user.id,
+                'username': request.user.username,
+                'email': request.user.email,
+            }
+        })
