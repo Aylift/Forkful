@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -152,6 +154,13 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # 1 hour
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # 1 week
+    'ROTATE_REFRESH_TOKENS': True,  # Creates new refresh token on refresh
+    'BLACKLIST_AFTER_ROTATION': False,  # Don't blacklist old refresh tokens
 }
 
 AUTH_USER_MODEL = 'users.CustomUser'
