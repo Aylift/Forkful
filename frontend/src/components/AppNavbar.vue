@@ -2,6 +2,7 @@
   <nav class="navbar">
     <router-link to="/">Home</router-link>
     <router-link to="/food">Food</router-link>
+    <!-- TODO conditionally redirect to either profile or loginregister, display -->
     <router-link class="profile-link" to="/profile">Profile</router-link>
   </nav>
 </template>

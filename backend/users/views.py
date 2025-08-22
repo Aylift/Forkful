@@ -38,21 +38,21 @@ class RegisterView(generics.CreateAPIView):
             }, status=status.HTTP_201_CREATED)
 
 
-class CustomTokenObtainPairSerializer(TokenObtainPairView):
-    def validate(self, attrs):
-            data = super().validate(attrs)
-            data['user'] = {
-                'id': self.user.id,
-                'username': self.user.username,
-                'email': self.user.email,
-                'first_name': self.user.first_name,
-                'last_name': self.user.last_name,
-            }
-            return data
+# class CustomTokenObtainPairSerializer(TokenObtainPairView):
+#     def validate(self, attrs):
+#             data = super().validate(attrs)
+#             data['user'] = {
+#                 'id': self.user.id,
+#                 'username': self.user.username,
+#                 'email': self.user.email,
+#                 'first_name': self.user.first_name,
+#                 'last_name': self.user.last_name,
+#             }
+#             return data
 
 
 class LoginView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+    pass
 
 
 class ProfileView(generics.RetrieveAPIView):
@@ -99,17 +99,11 @@ class LogoutView(APIView):
     serializer_class = LogoutSerializer
 
     def post(self, request):
-        try:
-            user = request.user
+        user = request.user
 
-            return Response({
-                'message': f'Goodbye {user.username}! Logout successful.'
-            }, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({
-                'message': 'Logout completed'
-            }, status=status.HTTP_200_OK)
+        return Response({
+            'message': f'Goodbye {user.username}! Logout successful.'
+        }, status=status.HTTP_200_OK)
 
 
 class CheckAuthView(APIView):
