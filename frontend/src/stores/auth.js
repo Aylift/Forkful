@@ -9,6 +9,11 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     // TODO: add try catch blocks, to catch errors
+    // TODO: add loading states
+
+    getters: {
+        isAuthenticated: (state) => !!state.token,
+    },
 
     actions: {
         async login(username, password) {
