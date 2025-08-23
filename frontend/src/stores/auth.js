@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     // TODO: add try catch blocks, to catch errors
+    // TODO: add loading states
 
     actions: {
         async login(username, password) {

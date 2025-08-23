@@ -1,23 +1,25 @@
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import App from './App.vue';
-import router from './router';
-import axios from 'axios';
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+import router from "./router";
+import axios from "axios";
 
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
 app.use(router);
-app.mount('#app');
+app.mount("#app");
 
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = "http://localhost:8000";
 axios.interceptors.request.use(
-    config => {
-      const token = localStorage.getItem('token');
+  (config) => {
+    if (!config.url.includes("/register")) {
+      const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      return config;
-    },
-    error => Promise.reject(error)
-  );
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
