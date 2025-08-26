@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>About</h1>
-    <p>This is about page.</p>
+    <h1>Home</h1>
+    <p>This is home page.</p>
   </div>
 </template>
 
