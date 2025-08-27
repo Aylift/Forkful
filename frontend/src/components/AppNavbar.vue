@@ -10,6 +10,7 @@
         <button @click="auth.logout">Logout</button>
       </template>
       <template v-else>
+        <router-link to="/">Home</router-link>
         <router-link to="/loginregister">Login</router-link>
       </template>
     </div>
