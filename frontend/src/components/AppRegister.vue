@@ -1,12 +1,50 @@
 <template>
-    <div>
-        <input v-model="username" placeholder="Username" />
-        <input v-model="password" placeholder="Password" />
-        <input v-model="password_repeat" placeholder="Repeat password" />
-        <input v-model="mail" placeholder="Mail" />
-        <button @click="registerUser">Register</button>
+    <div class="max-w-sm mx-auto p-6 border rounded">
+      <h2 class="text-xl font-bold mb-4">Register</h2>
+      
+      <div class="mb-3">
+        <input 
+          v-model="username" 
+          placeholder="Username" 
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      
+      <div class="mb-3">
+        <input 
+          type="password"
+          v-model="password" 
+          placeholder="Password" 
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      
+      <div class="mb-3">
+        <input 
+          type="password"
+          v-model="password_repeat" 
+          placeholder="Repeat password" 
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      
+      <div class="mb-4">
+        <input 
+          type="email"
+          v-model="mail" 
+          placeholder="Email" 
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      
+      <button 
+        @click="registerUser"
+        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+      >
+        Register
+      </button>
     </div>
-</template>
+  </template>
 
 <script setup>
 import { ref } from 'vue';

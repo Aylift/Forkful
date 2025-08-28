@@ -1,11 +1,32 @@
 <template>
-    <div>
-        <input v-model="username" placeholder="Username" />
-        <input v-model="password" placeholder="Password" />
-        <button @click="loginUser">Login</button>
+    <div class="max-w-sm mx-auto p-6 border rounded">
+      <h2 class="text-xl font-bold mb-4">Login</h2>
+      
+      <div class="mb-3">
+        <input 
+          v-model="username" 
+          placeholder="Username" 
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      
+      <div class="mb-4">
+        <input 
+          type="password"
+          v-model="password" 
+          placeholder="Password" 
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      
+      <button 
+        @click="loginUser"
+        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+      >
+        Login
+      </button>
     </div>
-</template>
-
+  </template>
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
