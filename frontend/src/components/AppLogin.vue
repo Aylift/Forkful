@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-sm mx-auto p-6 border rounded">
+    <div class="max-w-sm mx-auto p-6 border bg-white rounded-lg shadow-xl">
       <h2 class="text-xl font-bold mb-4">Login</h2>
       
       <div class="mb-3">
@@ -21,7 +21,7 @@
       
       <button 
         @click="loginUser"
-        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        class="w-full bg-white text-orange-500 py-2 rounded font-medium hover:bg-orange-50 transition-colors duration-200"
       >
         Login
       </button>

@@ -1,22 +1,21 @@
 <template>
   <div class="p-8">
-    <div class="mb-4 flex gap-2">
+    <div class="mb-4 flex justify-center gap-2">
       <button 
         @click="showLogin = true"
-        class="px-4 py-2 border rounded"
-        :class="showLogin ? 'bg-blue-500 text-white' : 'bg-white'"
+        class="px-4 py-2 border-2 border-white rounded transition-colors duration-200 font-medium"
+        :class="showLogin ? 'bg-white text-orange-500' : 'bg-white/20 text-white'"
       >
         Login
       </button>
       <button 
         @click="showLogin = false"
-        class="px-4 py-2 border rounded"
-        :class="!showLogin ? 'bg-blue-500 text-white' : 'bg-white'"
+        class="px-4 py-2 border-2 border-white rounded transition-colors duration-200 font-medium"
+        :class="!showLogin ? 'bg-white text-orange-500' : 'bg-white/20 text-white'"
       >
         Register
       </button>
     </div>
-    
     <AppLogin v-if="showLogin" />
     <AppRegister v-else />
   </div>
