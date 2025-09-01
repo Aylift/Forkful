@@ -8,6 +8,7 @@
           placeholder="Username" 
           class="w-full px-3 py-2 border rounded"
         />
+        <p v-if="auth.error?.username" class="text-red-500 text-sm"> {{ auth.error.username[0] }} </p>
       </div>
       
       <div class="mb-4">
@@ -17,6 +18,9 @@
           placeholder="Password" 
           class="w-full px-3 py-2 border rounded"
         />
+        <p v-if="auth.error?.password" class="text-red-500 text-sm">
+          {{ auth.error.password[0] }}
+        </p>
       </div>
       
       <button 

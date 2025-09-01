@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppNavbar />
-    <main class="min-h-screen bg-gradient-to-br from-orange-300 to-orange-500">
+    <main class="min-h-screen bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400 pt-20">
       <router-view />
     </main>
   </div>

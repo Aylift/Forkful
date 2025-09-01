@@ -1,18 +1,27 @@
 <template>
-  <nav class="navbar">
-    <div>
-      <template v-if="auth.isAuthenticated">
-        <router-link to="/">Home</router-link>
-        <router-link to="/food">Food</router-link>
-        <router-link class="profile-link" to="/profile">
-          {{ auth.user?.username || 'Profile' }}
-        </router-link>
-        <button @click="auth.logout">Logout</button>
-      </template>
-      <template v-else>
-        <router-link to="/">Home</router-link>
-        <router-link to="/loginregister">Login</router-link>
-      </template>
+  <nav class="absolute top-0 w-full z-10 bg-transparent">
+    <div class="px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex space-x-6">
+          <router-link 
+            to="/" 
+            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+          >
+            Home
+          </router-link>
+          <router-link 
+            to="/loginregister" 
+            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+          >
+            Login
+          </router-link>
+        </div>
+        
+        <!-- TODO: Add logo -->
+        <div class="text-white font-bold text-xl">
+          🍎 WellnessApp
+        </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -32,7 +41,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.navbar {
+/* .navbar {
   background: #2c3e50;
   padding: 1rem;
 }
@@ -46,5 +55,5 @@ onMounted(() => {
 
 .profile-link {
   float: right;
-}
+} */
 </style>

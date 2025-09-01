@@ -33,8 +33,10 @@ export const useAuthStore = defineStore('auth', {
         
         return { success: true };
       } catch (error) {
-        this.error = error.response?.data?.detail || 'Login failed';
-        console.error('Login error:', error);
+        if (error.response?.data) {
+          this.error = error.response.data;
+        }
+        console.log('ERROR LOGIN:', this.error)
         return { success: false, error: this.error };
       } finally {
         this.isLoading = false;
@@ -58,11 +60,10 @@ export const useAuthStore = defineStore('auth', {
         
         return { success: true };
       } catch (error) {
-        this.error = error.response?.data?.detail || 
-                     error.response?.data?.username?.[0] || 
-                     error.response?.data?.email?.[0] || 
-                     'Registration failed';
-        console.error('Registration error:', error);
+        if (error.response?.data) {
+          this.error = error.response.data;
+        }
+        console.log('ERROR REGISTER', this.error)
         return { success: false, error: this.error };
       } finally {
         this.isLoading = false;
@@ -78,7 +79,6 @@ export const useAuthStore = defineStore('auth', {
         const response = await api.get('/api/auth/check/');
         this.user = response.data;
       } catch (error) {
-        console.error('Failed to fetch user:', error);
         // If fetching user fails, token might be invalid
         if (error.response?.status === 401) {
           this.logout();
