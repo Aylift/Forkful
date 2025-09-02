@@ -38,9 +38,15 @@
           placeholder="Email" 
           class="w-full px-3 py-2 border rounded"
         />
-        <p v-if="auth.error?.mail" class="text-red-500 text-sm"> {{ auth.error.mail[0] }} </p>
+        <p v-if="auth.error?.email" class="text-red-500 text-sm"> {{ auth.error.email[0] }} </p>
       </div>
       
+      <div class="m-2 mt-8 mb-8">
+        <p v-if="auth.error?.detail || auth.error?.non_field_errors " class="text-red-500 text-sm text-center">
+          {{ auth.error?.detail || auth.error?.non_field_errors[0] }}
+        </p>
+      </div>
+
       <button 
         @click="registerUser"
         class="w-full bg-white text-orange-500 py-2 rounded font-medium hover:bg-orange-50 transition-colors duration-200"

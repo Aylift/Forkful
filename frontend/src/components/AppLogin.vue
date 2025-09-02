@@ -23,6 +23,12 @@
         </p>
       </div>
       
+      <div class="m-2 mt-8 mb-8">
+        <p v-if="auth.error?.detail " class="text-red-500 text-sm text-center">
+          {{ auth.error?.detail }}
+        </p>
+      </div>
+
       <button 
         @click="loginUser"
         class="w-full bg-white text-orange-500 py-2 rounded font-medium hover:bg-orange-50 transition-colors duration-200"
