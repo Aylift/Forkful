@@ -22,11 +22,17 @@
 </template>
   
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import AppLogin from '@/components/AppLogin.vue';
 import AppRegister from '@/components/AppRegister.vue';
+import { useAuthStore } from '@/stores/auth';
 
 const showLogin = ref(true);
+const auth = useAuthStore();
+
+watch(showLogin, () => {
+  auth.clearError();
+});
 </script>
 
 <style scoped>
