@@ -56,8 +56,11 @@ const auth = useAuthStore();
 
 const loginUser = async () => {
   auth.clearError();
-  await auth.login(username.value, password.value);
-  if (auth.token) {
+  successMessage.value = '';
+
+  const result = await auth.login(username.value, password.value);
+
+  if (result.success && auth.token) {
         successMessage.value = 'Logged in successfully! Redirecting...';
         setTimeout(() => {
             router.push('/profile');

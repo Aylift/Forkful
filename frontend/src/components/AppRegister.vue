@@ -76,10 +76,12 @@ const router = useRouter();
 const auth = useAuthStore();
 
 const registerUser = async () => {
-  await auth.register(username.value, password.value, password_repeat.value, mail.value);
   auth.clearError();
+  successMessage.value = '';
 
-  if (auth.token) {
+  const result = await auth.register(username.value, password.value, password_repeat.value, mail.value);
+
+  if (result.success && auth.token) {
         successMessage.value = 'Registration successful! Redirecting...';
         setTimeout(() => {
             router.push('/profile');
