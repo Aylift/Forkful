@@ -2,6 +2,10 @@
     <div class="max-w-sm mx-auto p-6 border bg-white rounded-lg shadow-xl">
       <h2 class="text-xl font-bold mb-4">Login</h2>
       
+      <div v-if="successMessage" class="mb-4 p-3 bg-green-500 text-white rounded text-center">
+        {{ successMessage }}
+      </div>
+
       <div class="mb-3">
         <input 
           v-model="username" 
@@ -31,9 +35,10 @@
 
       <button 
         @click="loginUser"
-        class="w-full bg-white text-orange-500 py-2 rounded font-medium hover:bg-orange-50 transition-colors duration-200"
+        :disabled="auth.isLoading"
+        class="w-full bg-white text-orange-500 py-2 rounded font-medium hover:bg-orange-50 transition-colors duration-200 disabled:opacity-50"
       >
-        Login
+        {{ auth.isLoading ? 'Logging in...' : 'Login' }}
       </button>
     </div>
   </template>
@@ -44,13 +49,20 @@ import { useAuthStore } from '@/stores/auth';
 
 const username = ref('');
 const password = ref('');
+const successMessage = ref('');
 
 const router = useRouter();
 const auth = useAuthStore();
 
 const loginUser = async () => {
-    await auth.login(username.value, password.value);
-    if (auth.token) router.push('/profile');
+  auth.clearError();
+  await auth.login(username.value, password.value);
+  if (auth.token) {
+        successMessage.value = 'Logged in successfully! Redirecting...';
+        setTimeout(() => {
+            router.push('/profile');
+        }, 1500);
+    }
 }
 
 </script>
