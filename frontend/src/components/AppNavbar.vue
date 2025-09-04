@@ -2,6 +2,7 @@
   <nav class="absolute top-0 w-full z-10 bg-transparent">
     <div class="px-6 py-4">
       <div class="flex items-center justify-between">
+
         <div class="flex space-x-6">
           <router-link 
             to="/" 
@@ -9,12 +10,29 @@
           >
             Home
           </router-link>
+          
           <router-link 
+            v-if="!auth.isAuthenticated" 
             to="/loginregister" 
             class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
           >
-            Login
+            Login/Register
           </router-link>
+          
+          <router-link 
+            v-else
+            to="/profile" 
+            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+          >
+            {{ auth.user?.username || 'Profile' }}
+          </router-link>
+          <button 
+            v-if="auth.isAuthenticated"
+            @click="auth.logout"
+            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+          >
+            Logout
+          </button>
         </div>
         
         <!-- TODO: Add logo -->
@@ -25,6 +43,7 @@
     </div>
   </nav>
 </template>
+
 
 <script setup>
 import { useAuthStore } from '@/stores/auth';
@@ -41,19 +60,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* .navbar {
-  background: #2c3e50;
-  padding: 1rem;
-}
 
-.navbar a {
-  color: white;
-  margin-right: 1rem;
-  margin-left: 1rem;
-  text-decoration: none;
-}
-
-.profile-link {
-  float: right;
-} */
 </style>
