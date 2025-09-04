@@ -38,7 +38,7 @@
       <div class="mb-4">
         <input 
           type="email"
-          v-model="mail" 
+          v-model="email" 
           placeholder="Email" 
           class="w-full px-3 py-2 border rounded"
         />
@@ -69,7 +69,7 @@ import { useAuthStore } from '@/stores/auth';
 const username = ref('');
 const password = ref('');
 const password_repeat = ref('');
-const mail = ref('');
+const email = ref('');
 const successMessage = ref('');
 
 const router = useRouter();
@@ -79,7 +79,7 @@ const registerUser = async () => {
   auth.clearError();
   successMessage.value = '';
 
-  const result = await auth.register(username.value, password.value, password_repeat.value, mail.value);
+  const result = await auth.register(username.value, password.value, password_repeat.value, email.value);
 
   if (result.success && auth.token) {
         successMessage.value = 'Registration successful! Redirecting...';
