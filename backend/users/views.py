@@ -3,9 +3,18 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, ProfileSerializer, ProfileUpdateSerializer, LogoutSerializer, CheckAuthResponseSerializer
+from .serializers import (
+    RegisterSerializer, 
+    UserSerializer,
+    UserWithProfileSerializer,
+    UserProfileSerializer,
+    UserProfileUpdateSerializer,
+    LogoutSerializer
+)
+
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from .models import UserProfile
 
 
 User = get_user_model()
@@ -23,13 +32,7 @@ class RegisterView(generics.CreateAPIView):
         refresh = RefreshToken.for_user(user)
 
         return Response({
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-            },
+            'user': UserWithProfileSerializer(user).data,
             'tokens': {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
@@ -38,25 +41,12 @@ class RegisterView(generics.CreateAPIView):
             }, status=status.HTTP_201_CREATED)
 
 
-# class CustomTokenObtainPairSerializer(TokenObtainPairView):
-#     def validate(self, attrs):
-#             data = super().validate(attrs)
-#             data['user'] = {
-#                 'id': self.user.id,
-#                 'username': self.user.username,
-#                 'email': self.user.email,
-#                 'first_name': self.user.first_name,
-#                 'last_name': self.user.last_name,
-#             }
-#             return data
-
-
 class LoginView(TokenObtainPairView):
     pass
 
 
 class ProfileView(generics.RetrieveAPIView):
-    serializer_class = ProfileSerializer
+    serializer_class = UserWithProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -66,8 +56,8 @@ class ProfileView(generics.RetrieveAPIView):
         return self.request.user
 
 
-class ProfileUpdateView(generics.UpdateAPIView):
-    serializer_class = ProfileUpdateSerializer
+class UserUpdateView(generics.UpdateAPIView):
+    serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -94,28 +84,34 @@ class ProfileUpdateView(generics.UpdateAPIView):
         return self.request.user
 
 
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+    
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return UserProfileUpdateSerializer
+        return UserProfileSerializer
+
+
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = LogoutSerializer
 
     def post(self, request):
-        user = request.user
-
         return Response({
-            'message': f'Goodbye {user.username}! Logout successful.'
+            'message': f'Goodbye {request.user.username}! Logout successful.'
         }, status=status.HTTP_200_OK)
 
 
 class CheckAuthView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = CheckAuthResponseSerializer
 
     def get(self, request):
         return Response({
             'authenticated': True,
-            'user': {
-                'id': request.user.id,
-                'username': request.user.username,
-                'email': request.user.email,
-            }
+            'user': UserWithProfileSerializer(request.user).data
         })

@@ -4,7 +4,6 @@ from .views import (
     RegisterView,
     LoginView,
     ProfileView,
-    ProfileUpdateView,
     LogoutView,
     CheckAuthView,
 )
@@ -18,5 +17,4 @@ urlpatterns = [
     path('auth/logout/', LogoutView.as_view(), name='logout'),
     path('auth/check/', CheckAuthView.as_view(), name='check_auth'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('profile/update/', ProfileUpdateView.as_view(), name='profile_update'),
 ]
