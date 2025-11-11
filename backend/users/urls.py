@@ -6,6 +6,8 @@ from .views import (
     ProfileView,
     LogoutView,
     CheckAuthView,
+    UserUpdateView,
+    UserProfileView,
 )
 
 app_name = 'users'
@@ -17,4 +19,6 @@ urlpatterns = [
     path('auth/logout/', LogoutView.as_view(), name='logout'),
     path('auth/check/', CheckAuthView.as_view(), name='check_auth'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('auth/user/update/', UserUpdateView.as_view(), name='user_update'),
+    path('auth/profile/update/', UserProfileView.as_view(), name='profile_update'),
 ]

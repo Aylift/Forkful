@@ -9,6 +9,7 @@ from .serializers import (
     UserWithProfileSerializer,
     UserProfileSerializer,
     UserProfileUpdateSerializer,
+    UserUpdateSerializer,
     LogoutSerializer
 )
 
@@ -57,28 +58,8 @@ class ProfileView(generics.RetrieveAPIView):
 
 
 class UserUpdateView(generics.UpdateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_object(self):
-            return self.request.user
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        profile_serializer = ProfileSerializer(instance)
-        return Response({
-            'message': 'Profile updated successfully',
-            'user': profile_serializer.data
-        })
-
-    def patch(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
 
     def get_object(self):
         return self.request.user

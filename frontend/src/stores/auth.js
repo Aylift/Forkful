@@ -95,6 +95,43 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
+  async updateUser(userData) {
+    this.isLoading = true;
+    this.error = null;
+    try {
+      // Calls: PATCH /api/auth/user/update/
+      const response = await api.patch('/api/auth/user/update/', userData); 
+      
+      // Update the user state locally with the response
+      this.user.user = { ...this.user.user, ...response.data };
+      return { success: true };
+    } catch (error) {
+      this.error = error.response?.data || { detail: 'An error occurred.' };
+      return { success: false, error: this.error };
+    } finally {
+      this.isLoading = false;
+    }
+  },
+
+  async updateProfile(profileData) {
+    this.isLoading = true;
+    this.error = null;
+    try {
+      // Calls: PATCH /api/auth/profile/update/
+      const response = await api.patch('/api/auth/profile/update/', profileData);
+
+      // Update the profile state locally with the full profile response
+      this.user.user.profile = response.data;
+      return { success: true };
+    } catch (error)
+    {
+      this.error = error.response?.data || { detail: 'An error occurred.' };
+      return { success: false, error: this.error };
+    } finally {
+      this.isLoading = false;
+    }
+  },
+
     clearError() {
       this.error = null;
     }
