@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="app-wrapper min-h-screen bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400">
     <AppNavbar />
-    <main class="min-h-screen bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400 pt-20">
+    
+    <main class="pt-20">
       <router-view />
     </main>
   </div>
@@ -12,7 +13,7 @@ import AppNavbar from "@/components/AppNavbar.vue";
 </script>
 
 <style scoped>
-main {
+.app-wrapper {
   animation: gradientShift 8s ease infinite;
   background-size: 400% 400%;
 }

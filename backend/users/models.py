@@ -3,7 +3,6 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-# Możemy później rozwinąć CustomUser, albo zrobić kolejny model np. Profile z One-to-One do CustomUser i tam wrzucić dodatkowe fieldy
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)

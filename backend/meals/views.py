@@ -1,11 +1,14 @@
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
-from .models import Meal, MealIngredient
-from .serializers import MealIngredientSerializer, MealSerializer
+from .models import Meal, MealIngredient, DailyEntry
+from .serializers import MealIngredientSerializer, MealSerializer, DailyEntrySerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from datetime import date
 
 
 class MealListView(APIView):
@@ -122,3 +125,30 @@ class MealIngredientDetailView(APIView):
         meal_ingredient = get_object_or_404(MealIngredient, pk=pk)
         meal_ingredient.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class DailyEntryListView(generics.ListCreateAPIView):
+    serializer_class = DailyEntrySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = DailyEntry.objects.filter(user=self.request.user)
+
+        date_param = self.request.query_params.get('date')
+        if date_param:
+            queryset = queryset.filter(date=date_param)
+        else:
+            queryset = queryset.filter(date=date.today)
+            
+        return queryset.select_related('meal')
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class DailyEntryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DailyEntrySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return DailyEntry.objects.filter(user=self.request.user)
