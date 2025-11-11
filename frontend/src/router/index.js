@@ -1,17 +1,17 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import FoodPage from '@/pages/FoodPage.vue';
-import HomePage from '@/pages/HomePage.vue';
+import MealsDashboard from '@/pages/MealsDashboard.vue';
 import ProfilePage from "@/pages/ProfilePage.vue";
 import LoginRegisterPage from '@/pages/LoginRegisterPage.vue';
-import FoodLogPage from '@/pages/FoodLogPage.vue'
+import MealsPage from '@/pages/MealsPage.vue';
+import LandingPage from '@/pages/LandingPage.vue';
 
 const routes = [
-    {path: '/', component: HomePage},
-    {path: '/food', component: FoodPage},
+    {path: '/', component: LandingPage },
+    {path: '/dashboard', component: MealsDashboard},
+    {path: '/meals', component: MealsPage},
     {path: '/profile', component: ProfilePage},
     {path: '/loginregister', component: LoginRegisterPage},
-    {path: '/log', component: FoodLogPage},
 ];
 
 const router = createRouter({

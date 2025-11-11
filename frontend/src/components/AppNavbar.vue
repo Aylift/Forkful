@@ -13,10 +13,16 @@
           
           <template v-if="auth.isAuthenticated">
             <router-link 
-              to="/log" 
+              to="/dashboard" 
               class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
             >
-              Food Log
+              Dashboard
+            </router-link>
+            <router-link 
+              to="/meals" 
+              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+            >
+              Meal Library
             </router-link>
             <router-link 
               to="/profile" 
@@ -59,7 +65,7 @@ const router = useRouter();
 
 const handleLogout = () => {
   auth.logout();
-  router.push('/loginregister'); 
+  router.push('/');
 };
 </script>
 
