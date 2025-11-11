@@ -24,6 +24,11 @@
             >
               Meal Library
             </router-link>
+          </template>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <template v-if="auth.isAuthenticated">
             <router-link 
               to="/profile" 
               class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
@@ -46,10 +51,9 @@
               Login/Register
             </router-link>
           </template>
-        </div>
-        
-        <div class="text-white font-bold text-xl">
-          🍎 WellnessApp
+          <div class="text-white font-bold text-xl">
+            🍴 Forkful
+          </div>
         </div>
       </div>
     </div>
