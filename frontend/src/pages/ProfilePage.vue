@@ -79,15 +79,10 @@ import FormSelect from '@/components/FormSelect.vue';
 import StatDisplay from '@/components/StatDisplay.vue';
 
 
-
-// --- Main Component Logic ---
 const auth = useAuthStore();
-
-// Computed properties to safely access nested user/profile data
 const user = computed(() => auth.user?.user);
 const profile = computed(() => auth.user?.user?.profile);
 
-// Form state for CustomUser
 const userForm = ref({
   first_name: '',
   last_name: '',
@@ -95,7 +90,6 @@ const userForm = ref({
   address: ''
 });
 
-// Form state for UserProfile
 const profileForm = ref({
   height: 170,
   weight: 70,
@@ -110,7 +104,6 @@ const profileForm = ref({
   target_fat: 65
 });
 
-// Form submission states
 const isUpdatingUser = ref(false);
 const userUpdateSuccess = ref(false);
 const userUpdateError = ref(null);
@@ -118,7 +111,6 @@ const isUpdatingProfile = ref(false);
 const profileUpdateSuccess = ref(false);
 const profileUpdateError = ref(null);
 
-// Populate forms when auth.user data is available
 watchEffect(() => {
   if (user.value) {
     userForm.value.first_name = user.value.first_name || '';
@@ -127,7 +119,6 @@ watchEffect(() => {
     userForm.value.address = user.value.address || '';
   }
   if (profile.value) {
-    // Copy all relevant fields from the store's profile to the local form
     Object.assign(profileForm.value, {
       height: profile.value.height,
       weight: profile.value.weight,
@@ -144,7 +135,6 @@ watchEffect(() => {
   }
 });
 
-// --- Select Options (from your Django models) ---
 const genderOptions = [
   { value: 'M', text: 'Male' },
   { value: 'F', text: 'Female' },
@@ -164,7 +154,6 @@ const goalOptions = [
   { value: 'gain', text: 'Gain weight' },
 ];
 
-// --- Form Handlers ---
 async function handleUserUpdate() {
   isUpdatingUser.value = true;
   userUpdateSuccess.value = false;
@@ -186,7 +175,6 @@ async function handleProfileUpdate() {
   profileUpdateSuccess.value = false;
   profileUpdateError.value = null;
 
-  // Convert types before sending, as form inputs can be strings
   const payload = {
     ...profileForm.value,
     height: Number(profileForm.value.height),
@@ -205,7 +193,6 @@ async function handleProfileUpdate() {
     profileUpdateSuccess.value = true;
     setTimeout(() => profileUpdateSuccess.value = false, 3000);
   } else {
-    // Handle validation errors (e.g., "Target weight should be less...")
     if (typeof result.error === 'object' && result.error !== null) {
       profileUpdateError.value = Object.values(result.error).join(' ');
     } else {
@@ -217,5 +204,4 @@ async function handleProfileUpdate() {
 </script>
 
 <style scoped>
-/* You can add component-specific styles here */
 </style>
