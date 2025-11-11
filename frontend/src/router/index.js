@@ -4,12 +4,14 @@ import FoodPage from '@/pages/FoodPage.vue';
 import HomePage from '@/pages/HomePage.vue';
 import ProfilePage from "@/pages/ProfilePage.vue";
 import LoginRegisterPage from '@/pages/LoginRegisterPage.vue';
+import FoodLogPage from '@/pages/FoodLogPage.vue'
 
 const routes = [
     {path: '/', component: HomePage},
     {path: '/food', component: FoodPage},
     {path: '/profile', component: ProfilePage},
     {path: '/loginregister', component: LoginRegisterPage},
+    {path: '/log', component: FoodLogPage},
 ];
 
 const router = createRouter({

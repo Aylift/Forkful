@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Meal, MealIngredient
+from .models import Meal, MealIngredient, DailyEntry
 from nutrients.models import Ingredient
 from nutrients.serializers import IngredientSerializer
 
@@ -47,3 +47,19 @@ class MealSerializer(serializers.ModelSerializer):
             MealIngredient.objects.create(meal=instance, **ingredient_data)
 
         return instance
+
+
+class DailyEntrySerializer(serializers.ModelSerializer):
+    meal = MealSerializer(read_only=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    meal_id = serializers.PrimaryKeyRelatedField(
+        queryset=Meal.objects.all(),
+        source='meal',
+        write_only=True
+    )
+
+    class Meta:
+        model = DailyEntry
+        fields = ['id', 'user', 'meal', 'meal_id', 'date', 'servings']
+        read_only_fields = ['user', 'meal']

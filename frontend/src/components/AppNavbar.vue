@@ -3,7 +3,7 @@
     <div class="px-6 py-4">
       <div class="flex items-center justify-between">
 
-        <div class="flex space-x-6">
+        <div class="flex items-center space-x-6">
           <router-link 
             to="/" 
             class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
@@ -11,31 +11,37 @@
             Home
           </router-link>
           
-          <router-link 
-            v-if="!auth.isAuthenticated" 
-            to="/loginregister" 
-            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
-          >
-            Login/Register
-          </router-link>
+          <template v-if="auth.isAuthenticated">
+            <router-link 
+              to="/log" 
+              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+            >
+              Food Log
+            </router-link>
+            <router-link 
+              to="/profile" 
+              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+            >
+              {{ auth.user?.user?.username || 'Profile' }}
+            </router-link>
+            <button 
+              @click="handleLogout"
+              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+            >
+              Logout
+            </button>
+          </template>
           
-          <router-link 
-            v-else
-            to="/profile" 
-            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
-          >
-            {{ auth.user?.username || 'Profile' }}
-          </router-link>
-          <button 
-            v-if="auth.isAuthenticated"
-            @click="auth.logout"
-            class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
-          >
-            Logout
-          </button>
+          <template v-else>
+            <router-link 
+              to="/loginregister" 
+              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+            >
+              Login/Register
+            </router-link>
+          </template>
         </div>
         
-        <!-- TODO: Add logo -->
         <div class="text-white font-bold text-xl">
           🍎 WellnessApp
         </div>
@@ -44,21 +50,18 @@
   </nav>
 </template>
 
-
 <script setup>
 import { useAuthStore } from '@/stores/auth';
-import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const auth = useAuthStore();
+const router = useRouter();
 
-onMounted(() => {
-  if (auth.token && !auth.user) {
-    auth.fetchUser();
-  }
-})
-
+const handleLogout = () => {
+  auth.logout();
+  router.push('/loginregister'); 
+};
 </script>
 
 <style scoped>
-
 </style>

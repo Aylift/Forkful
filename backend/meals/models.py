@@ -1,5 +1,7 @@
 from django.db import models
+from users.models import CustomUser
 from nutrients.models import Ingredient, IngredientNutrient
+from datetime import date
 
 
 class Meal(models.Model):
@@ -33,3 +35,17 @@ class MealIngredient(models.Model):
 
     def __str__(self):
         return f'{self.amount_in_grams}g of {self.ingredient.name} in {self.meal.name}'
+
+
+class DailyEntry(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='daily_entries')
+    meal = models.ForeignKey(Meal, on_delete=models.CASCADE, related_name='daily_entries')
+    date = models.DateField(default=date.today, help_text="The date the meal was eaten")
+    servings = models.FloatField(default=1.0, help_text="Number of servings eaten")
+
+    class Meta:
+        verbose_name_plural = "Daily Entries"
+        ordering = ['-date']
+
+    def __str__(self):
+        return f'{self.user.username} ate {self.servings}x {self.meal.name} on {self.date}'

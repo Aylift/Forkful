@@ -12,7 +12,7 @@
 
     <h2>Total Nutrients</h2>
     <ul>
-      <li>{{ meal.total_nutrients.Kilocalories.amount }} {{ meal.total_nutrients.Kilocalories.unit }}</li>
+      <li>{{ meal.total_nutrients.Calories.amount }} {{ meal.total_nutrients.Calories.unit }}</li>
       <li>Protein: {{ meal.total_nutrients.Protein.amount }} {{ meal.total_nutrients.Protein.unit }}</li>
       <li>Fat: {{ meal.total_nutrients.Fat.amount }} {{ meal.total_nutrients.Fat.unit }}</li>
       <li>Carbs: {{ meal.total_nutrients.Carbohydrates.amount }} {{ meal.total_nutrients.Carbohydrates.unit }}</li>
