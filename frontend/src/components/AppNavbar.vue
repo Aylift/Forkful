@@ -37,7 +37,7 @@
             </router-link>
             <button 
               @click="handleLogout"
-              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+              class="text-white font-medium px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 transition-all duration-200"
             >
               Logout
             </button>
@@ -46,7 +46,7 @@
           <template v-else>
             <router-link 
               to="/loginregister" 
-              class="text-white font-medium px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200"
+              class="text-white font-medium px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 transition-all duration-200"
             >
               Login/Register
             </router-link>

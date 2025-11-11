@@ -14,6 +14,6 @@ app.use(pinia);
 const auth = useAuthStore();
 
 auth.initializeAuth().then(() => {
-    app.use(router); // <-- 4. Use the router *after* auth is ready
-    app.mount("#app"); // <-- 5. Mount the app *after* auth is ready
+    app.use(router);
+    app.mount("#app");
   });
