@@ -138,7 +138,7 @@ class DailyEntryListView(generics.ListCreateAPIView):
         if date_param:
             queryset = queryset.filter(date=date_param)
         else:
-            queryset = queryset.filter(date=date.today)
+            queryset = queryset.filter(date=date.today())
             
         return queryset.select_related('meal')
 
