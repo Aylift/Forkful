@@ -87,7 +87,7 @@ class NutrientDetailView(APIView):
         responses={200: IngredientNutrientSerializer}
     )
     def get(self, request, pk):
-        nutrient = get_object_or_404(Ingredient, pk=pk)
+        nutrient = get_object_or_404(Nutrient, pk=pk)
         serializer = NutrientSerializer(nutrient)
         return Response(serializer.data)
 
@@ -145,8 +145,8 @@ class IngredientNutrientDetailView(APIView):
         responses={200: IngredientNutrientSerializer}
     )
     def get(self, request, pk):
-        nutrient_ingredient = get_object_or_404(Ingredient, pk=pk)
-        serializer = IngredientSerializer(nutrient_ingredient)
+        nutrient_ingredient = get_object_or_404(IngredientNutrient, pk=pk)
+        serializer = IngredientNutrientSerializer(nutrient_ingredient)
         return Response(serializer.data)
 
     @extend_schema(
