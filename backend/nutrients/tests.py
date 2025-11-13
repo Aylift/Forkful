@@ -22,8 +22,6 @@ class NutrientsAppTests(TestCase):
             amount_per_100g=10.0
         )
 
-    # --- Model Tests ---
-
     def test_ingredient_str_method(self):
         self.assertEqual(str(self.ingredient), 'Apple')
 
@@ -39,10 +37,8 @@ class NutrientsAppTests(TestCase):
             IngredientNutrient.objects.create(
                 ingredient=self.ingredient,
                 nutrient=self.nutrient,
-                amount_per_100g=20.0 # Same ingredient/nutrient pair
+                amount_per_100g=20.0
             )
-
-    # --- Ingredient Endpoint Tests ---
 
     def test_get_ingredient_list_unauthenticated(self):
         response = self.client.get('/api/ingredients/')
@@ -75,8 +71,6 @@ class NutrientsAppTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Ingredient.objects.count(), 0)
 
-    # --- Nutrient Endpoint Tests ---
-
     def test_get_nutrient_list(self):
         response = self.client.get('/api/nutrients/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -94,8 +88,6 @@ class NutrientsAppTests(TestCase):
         response = self.client.post('/api/nutrients/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Nutrient.objects.count(), 2)
-
-    # --- IngredientNutrient Endpoint Tests ---
 
     def test_get_ingredient_nutrient_list(self):
         response = self.client.get('/api/ingredient_nutrients/')
