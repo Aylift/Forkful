@@ -1,0 +1,1244 @@
+openapi: 3.0.3
+info:
+  title: Forkful API
+  version: 1.0.0
+  description: Meal prep web app
+paths:
+  /api/auth/check/:
+    get:
+      operationId: auth_check_retrieve
+      summary: Check authentication status
+      tags:
+      - Authentication
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      summary: Login (Get Tokens)
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      summary: Logout (Blacklist Token)
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Logout'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Logout'
+          description: ''
+  /api/auth/profile/update/:
+    get:
+      operationId: auth_profile_update_retrieve
+      summary: Get fitness profile
+      tags:
+      - User Profile
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: auth_profile_update_partial_update
+      summary: Update fitness profile
+      tags:
+      - User Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileUpdate'
+          description: ''
+  /api/auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register'
+          description: ''
+  /api/auth/user/update/:
+    patch:
+      operationId: auth_user_update_partial_update
+      summary: Update basic user info
+      tags:
+      - User Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdate'
+          description: ''
+  /api/daily-entries/:
+    get:
+      operationId: daily_entries_list
+      description: Get food log for the current user. Filter by date using '?date=YYYY-MM-DD'.
+      summary: List daily entries
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+        description: Filter by date (YYYY-MM-DD)
+      tags:
+      - Food Log
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DailyEntry'
+          description: ''
+    post:
+      operationId: daily_entries_create
+      description: Get food log for the current user. Filter by date using '?date=YYYY-MM-DD'.
+      summary: List daily entries
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+        description: Filter by date (YYYY-MM-DD)
+      tags:
+      - Food Log
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyEntry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DailyEntry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DailyEntry'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyEntry'
+          description: ''
+  /api/daily-entries/{id}/:
+    get:
+      operationId: daily_entries_retrieve
+      summary: Retrieve log entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Food Log
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyEntry'
+          description: ''
+    put:
+      operationId: daily_entries_update
+      summary: Update log entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Food Log
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyEntry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DailyEntry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DailyEntry'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyEntry'
+          description: ''
+    patch:
+      operationId: daily_entries_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Food Log
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDailyEntry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDailyEntry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDailyEntry'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyEntry'
+          description: ''
+    delete:
+      operationId: daily_entries_destroy
+      summary: Delete log entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Food Log
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/ingredient_nutrients/:
+    get:
+      operationId: ingredient_nutrients_retrieve
+      summary: List ingredient-nutrient links
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: ingredient_nutrients_create
+      summary: Link nutrient to ingredient
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ingredient_nutrients/{id}/:
+    get:
+      operationId: ingredient_nutrients_retrieve_2
+      summary: Retrieve link
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: ingredient_nutrients_update
+      summary: Update link
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: ingredient_nutrients_destroy
+      summary: Delete link
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/ingredients/:
+    get:
+      operationId: ingredients_retrieve
+      summary: List ingredients
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: ingredients_create
+      summary: Create ingredient
+      tags:
+      - Ingredients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ingredient'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ingredient'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ingredient'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ingredients/{id}/:
+    put:
+      operationId: ingredients_update
+      summary: Update ingredient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: ingredients_destroy
+      summary: Delete ingredient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/meal_ingredients:
+    get:
+      operationId: meal_ingredients_retrieve
+      summary: List meal ingredients
+      tags:
+      - Meal Ingredients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: meal_ingredients_create
+      summary: Add ingredient to meal
+      tags:
+      - Meal Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/meal_ingredients/{id}:
+    get:
+      operationId: meal_ingredients_retrieve_2
+      summary: Retrieve meal ingredient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Meal Ingredients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: meal_ingredients_update
+      summary: Update meal ingredient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Meal Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: meal_ingredients_destroy
+      summary: Remove ingredient from meal
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Meal Ingredients
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/meals/:
+    get:
+      operationId: meals_list
+      description: Returns a list of all available meals with calculated total nutrients.
+      summary: List all meals
+      tags:
+      - Meals
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+          description: ''
+    post:
+      operationId: meals_create
+      summary: Create a new meal
+      tags:
+      - Meals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Meal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Meal'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+          description: ''
+  /api/meals/{id}/:
+    get:
+      operationId: meals_retrieve
+      summary: Retrieve a meal
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Meals
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+          description: ''
+    put:
+      operationId: meals_update
+      summary: Update a meal
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Meals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Meal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Meal'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+          description: ''
+    delete:
+      operationId: meals_destroy
+      summary: Delete a meal
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Meals
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/nutrients/:
+    get:
+      operationId: nutrients_retrieve
+      summary: List nutrients
+      tags:
+      - Nutrients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: nutrients_create
+      summary: Create nutrient
+      tags:
+      - Nutrients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/nutrients/{id}/:
+    get:
+      operationId: nutrients_retrieve_2
+      summary: Retrieve nutrient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Nutrients
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: nutrients_update
+      summary: Update nutrient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Nutrients
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: nutrients_destroy
+      summary: Delete nutrient
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Nutrients
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/profile/:
+    get:
+      operationId: profile_retrieve
+      summary: Get current user data
+      tags:
+      - User Profile
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithProfile'
+          description: ''
+components:
+  schemas:
+    ActivityLevelEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: |-
+        * `0` - No activity
+        * `1` - Little activity (1-2 light workouts a week)
+        * `2` - Medium activity (3-4 medium workouts a week)
+        * `3` - High activity (4-5 medium-heavy workouts a week)
+        * `4` - Extreme activity (5+ intense workouts a week)
+    DailyEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal:
+          allOf:
+          - $ref: '#/components/schemas/Meal'
+          readOnly: true
+        meal_id:
+          type: integer
+          writeOnly: true
+        date:
+          type: string
+          format: date
+          description: The date the meal was eaten
+        servings:
+          type: number
+          format: double
+          description: Number of servings eaten
+      required:
+      - id
+      - meal
+      - meal_id
+    FitnessGoalEnum:
+      enum:
+      - lose
+      - maintain
+      - gain
+      type: string
+      description: |-
+        * `lose` - Lose weight
+        * `maintain` - Maintain weight
+        * `gain` - Gain weight
+    GenderEnum:
+      enum:
+      - M
+      - F
+      type: string
+      description: |-
+        * `M` - Male
+        * `F` - Female
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        category:
+          type: string
+          maxLength: 255
+      required:
+      - category
+      - id
+      - name
+    Logout:
+      type: object
+      properties:
+        refresh:
+          type: string
+      required:
+      - refresh
+    Meal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        meal_ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealIngredient'
+        total_nutrients:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - meal_ingredients
+      - name
+      - total_nutrients
+    MealIngredient:
+      type: object
+      properties:
+        ingredient:
+          allOf:
+          - $ref: '#/components/schemas/Ingredient'
+          readOnly: true
+        ingredient_id:
+          type: integer
+          writeOnly: true
+        amount_in_grams:
+          type: number
+          format: double
+          description: Amount used in grams
+      required:
+      - amount_in_grams
+      - ingredient
+      - ingredient_id
+    PatchedDailyEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal:
+          allOf:
+          - $ref: '#/components/schemas/Meal'
+          readOnly: true
+        meal_id:
+          type: integer
+          writeOnly: true
+        date:
+          type: string
+          format: date
+          description: The date the meal was eaten
+        servings:
+          type: number
+          format: double
+          description: Number of servings eaten
+    PatchedUserProfileUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        height:
+          type: integer
+          maximum: 300
+          minimum: 50
+          description: Height in cm
+        weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: Current weight in kg
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        profile_picture:
+          type: string
+          format: uri
+          nullable: true
+        activity_level:
+          allOf:
+          - $ref: '#/components/schemas/ActivityLevelEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        target_weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: Target weight in kg
+        fitness_goal:
+          $ref: '#/components/schemas/FitnessGoalEnum'
+        target_calories:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_protein:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_carbs:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_fat:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+    PatchedUserUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        password_repeat:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+      required:
+      - email
+      - password
+      - password_repeat
+      - username
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        age:
+          type: string
+          readOnly: true
+        bmi:
+          type: string
+          readOnly: true
+        height:
+          type: integer
+          maximum: 300
+          minimum: 50
+          description: Height in cm
+        weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: Current weight in kg
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        profile_picture:
+          type: string
+          format: uri
+          nullable: true
+        activity_level:
+          allOf:
+          - $ref: '#/components/schemas/ActivityLevelEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        target_weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: Target weight in kg
+        fitness_goal:
+          $ref: '#/components/schemas/FitnessGoalEnum'
+        target_calories:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_protein:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_carbs:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_fat:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - age
+      - bmi
+      - created_at
+      - gender
+      - height
+      - id
+      - target_calories
+      - target_carbs
+      - target_fat
+      - target_protein
+      - target_weight
+      - updated_at
+      - user
+      - weight
+    UserProfileUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        height:
+          type: integer
+          maximum: 300
+          minimum: 50
+          description: Height in cm
+        weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: Current weight in kg
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        profile_picture:
+          type: string
+          format: uri
+          nullable: true
+        activity_level:
+          allOf:
+          - $ref: '#/components/schemas/ActivityLevelEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        target_weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: Target weight in kg
+        fitness_goal:
+          $ref: '#/components/schemas/FitnessGoalEnum'
+        target_calories:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_protein:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_carbs:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        target_fat:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - gender
+      - height
+      - id
+      - target_calories
+      - target_carbs
+      - target_fat
+      - target_protein
+      - target_weight
+      - weight
+    UserUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+    UserWithProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 20
+        address:
+          type: string
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/UserProfile'
+          readOnly: true
+      required:
+      - email
+      - id
+      - profile
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
