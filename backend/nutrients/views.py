@@ -1,29 +1,23 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema
-from .models import Ingredient, Nutrient, IngredientNutrient
-from .serializers import IngredientSerializer, NutrientSerializer, IngredientNutrientSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from drf_spectacular.utils import extend_schema
+from .models import Ingredient, Nutrient, IngredientNutrient
+from .serializers import IngredientSerializer, NutrientSerializer, IngredientNutrientSerializer
 
 
 class IngredientListView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    @extend_schema(
-        summary="List of all ingredients",
-        responses={200: IngredientSerializer(many=True)}
-    )
+
+    @extend_schema(summary="List ingredients", tags=['Ingredients'])
     def get(self, request):
         ingredients = Ingredient.objects.all()
         serializer = IngredientSerializer(ingredients, many=True)
         return Response(serializer.data)
 
-    @extend_schema(
-        summary="Add ingredient",
-        request=IngredientSerializer,
-        responses={201: IngredientSerializer}
-    )
+    @extend_schema(summary="Create ingredient", request=IngredientSerializer, tags=['Ingredients'])
     def post(self, request):
         serializer = IngredientSerializer(data=request.data)
         if serializer.is_valid():
@@ -34,11 +28,8 @@ class IngredientListView(APIView):
 
 class IngredientDetailView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    @extend_schema(
-        summary="Edit ingredient",
-        request=IngredientSerializer,
-        responses={200: IngredientSerializer}
-    )
+
+    @extend_schema(summary="Update ingredient", tags=['Ingredients'])
     def put(self, request, pk):
         ingredient = get_object_or_404(Ingredient, pk=pk)
         serializer = IngredientSerializer(ingredient, data=request.data)
@@ -47,10 +38,7 @@ class IngredientDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @extend_schema(
-        summary="Delete ingredient",
-        responses={204: None}
-    )
+    @extend_schema(summary="Delete ingredient", tags=['Ingredients'])
     def delete(self, request, pk):
         ingredient = get_object_or_404(Ingredient, pk=pk)
         ingredient.delete()
@@ -59,20 +47,14 @@ class IngredientDetailView(APIView):
 
 class NutrientListView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    @extend_schema(
-        summary="List of all nutrients",
-        responses={200: NutrientSerializer(many=True)}
-    )
+
+    @extend_schema(summary="List nutrients", tags=['Nutrients'])
     def get(self, request):
         nutrients = Nutrient.objects.all()
         serializer = NutrientSerializer(nutrients, many=True)
         return Response(serializer.data)
 
-    @extend_schema(
-        summary="Add nutrient",
-        request=NutrientSerializer,
-        responses={201: NutrientSerializer}
-    )
+    @extend_schema(summary="Create nutrient", tags=['Nutrients'])
     def post(self, request):
         serializer = NutrientSerializer(data=request.data)
         if serializer.is_valid():
@@ -82,20 +64,14 @@ class NutrientListView(APIView):
 
 class NutrientDetailView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    @extend_schema(
-        summary="Retrieve nutrient",
-        responses={200: IngredientNutrientSerializer}
-    )
+
+    @extend_schema(summary="Retrieve nutrient", tags=['Nutrients'])
     def get(self, request, pk):
         nutrient = get_object_or_404(Nutrient, pk=pk)
         serializer = NutrientSerializer(nutrient)
         return Response(serializer.data)
 
-    @extend_schema(
-        summary="Edit nutrient",
-        request=NutrientSerializer,
-        responses={200: NutrientSerializer}
-    )
+    @extend_schema(summary="Update nutrient", tags=['Nutrients'])
     def put(self, request, pk):
         nutrient = get_object_or_404(Nutrient, pk=pk)
         serializer = NutrientSerializer(nutrient, data=request.data)
@@ -104,10 +80,7 @@ class NutrientDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @extend_schema(
-        summary="Delete nutrient",
-        responses={204: None}
-    )
+    @extend_schema(summary="Delete nutrient", tags=['Nutrients'])
     def delete(self, request, pk):
         nutrient = get_object_or_404(Nutrient, pk=pk)
         nutrient.delete()
@@ -116,20 +89,14 @@ class NutrientDetailView(APIView):
 
 class IngredientNutrientListView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    @extend_schema(
-        summary="List of all ingredient-nutrient association",
-        responses={200: IngredientNutrientSerializer(many=True)}
-    )
+
+    @extend_schema(summary="List ingredient-nutrient links", tags=['Ingredients'])
     def get(self, request):
         ingredient_nutrients = IngredientNutrient.objects.all()
         serializer = IngredientNutrientSerializer(ingredient_nutrients, many=True)
         return Response(serializer.data)
 
-    @extend_schema(
-        summary="Add ingredient-nutrient association",
-        request=IngredientNutrientSerializer,
-        responses={201: IngredientNutrientSerializer}
-    )
+    @extend_schema(summary="Link nutrient to ingredient", tags=['Ingredients'])
     def post(self, request):
         serializer = IngredientNutrientSerializer(data=request.data)
         if serializer.is_valid():
@@ -140,20 +107,14 @@ class IngredientNutrientListView(APIView):
 
 class IngredientNutrientDetailView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    @extend_schema(
-        summary="Retrieve nutrient-ingredient association",
-        responses={200: IngredientNutrientSerializer}
-    )
+
+    @extend_schema(summary="Retrieve link", tags=['Ingredients'])
     def get(self, request, pk):
         nutrient_ingredient = get_object_or_404(IngredientNutrient, pk=pk)
         serializer = IngredientNutrientSerializer(nutrient_ingredient)
         return Response(serializer.data)
 
-    @extend_schema(
-        summary="Edit ingredient-nutrient association",
-        request=IngredientNutrientSerializer,
-        responses={200: IngredientNutrientSerializer}
-    )
+    @extend_schema(summary="Update link", tags=['Ingredients'])
     def put(self, request, pk):
         ingredient_nutrient = get_object_or_404(IngredientNutrient, pk=pk)
         serializer = IngredientNutrientSerializer(ingredient_nutrient, data=request.data)
@@ -162,10 +123,7 @@ class IngredientNutrientDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @extend_schema(
-        summary="Delete ingredient-nutrient association",
-        responses={204: None}
-    )
+    @extend_schema(summary="Delete link", tags=['Ingredients'])
     def delete(self, request, pk):
         ingredient_nutrient = get_object_or_404(IngredientNutrient, pk=pk)
         ingredient_nutrient.delete()
