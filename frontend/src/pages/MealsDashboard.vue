@@ -24,7 +24,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 
       <div class="bg-gray-800 p-4 rounded-lg shadow-lg text-center border-b-4 border-blue-500">
-        <h3 class="text-gray-400 text-sm uppercase tracking-wide font-semibold">Białko</h3>
+        <h3 class="text-gray-400 text-sm uppercase tracking-wide font-semibold">Protein</h3>
         <div class="mt-2">
           <span class="text-2xl font-bold text-white">{{ consumedMacros.protein.toFixed(0) }}</span>
           <span class="text-gray-500 text-sm"> / {{ targetMacros.protein }}g</span>
@@ -37,7 +37,7 @@
       </div>
 
       <div class="bg-gray-800 p-4 rounded-lg shadow-lg text-center border-b-4 border-green-500">
-        <h3 class="text-gray-400 text-sm uppercase tracking-wide font-semibold">Węglowodany</h3>
+        <h3 class="text-gray-400 text-sm uppercase tracking-wide font-semibold">Carbohydrates</h3>
         <div class="mt-2">
           <span class="text-2xl font-bold text-white">{{ consumedMacros.carbs.toFixed(0) }}</span>
           <span class="text-gray-500 text-sm"> / {{ targetMacros.carbs }}g</span>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="bg-gray-800 p-4 rounded-lg shadow-lg text-center border-b-4 border-yellow-500">
-        <h3 class="text-gray-400 text-sm uppercase tracking-wide font-semibold">Tłuszcze</h3>
+        <h3 class="text-gray-400 text-sm uppercase tracking-wide font-semibold">Fat</h3>
         <div class="mt-2">
           <span class="text-2xl font-bold text-white">{{ consumedMacros.fat.toFixed(0) }}</span>
           <span class="text-gray-500 text-sm"> / {{ targetMacros.fat }}g</span>
@@ -219,11 +219,6 @@ async function fetchAllMeals() {
 async function handleAddEntry() {
   isSaving.value = true;
   try {
-    const payload = {
-      ...logForm.value,
-      date: selectedDate.value
-    };
-    const response = await api.post('/api/daily-entries/', payload);
     await fetchLogEntries();
     showModal.value = false;
   } catch (error) {
