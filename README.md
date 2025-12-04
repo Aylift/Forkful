@@ -31,7 +31,7 @@ Forkful is designed to address the common challenge of manual nutrition tracking
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Category | Technology |
 | :--- | :--- |
@@ -43,7 +43,7 @@ Forkful is designed to address the common challenge of manual nutrition tracking
 
 ---
 
-## 🚀 Local Development Setup
+## Local Development Setup
 
 The project is configured to run entirely within Docker containers.
 
@@ -106,7 +106,7 @@ The project is configured to run entirely within Docker containers.
 
 ---
 
-## 🧪 Testing
+## Testing
 
 The test suites for both the backend and frontend are also designed to run inside their respective Docker containers.
 
